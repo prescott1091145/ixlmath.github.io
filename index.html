@@ -42,11 +42,21 @@
     }
     iframe {
       position: absolute;
-      top: -150px; /* adjust to hide apps/polls */
+      top: -180px; /* move iframe up to hide header, apps, polls */
       left: 0;
       width: 100%;
-      height: 130%; /* extend to cover games area */
+      height: 160%; /* cover remaining games area */
       border: none;
+    }
+    /* Overlay to hide any visible Hubble text */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 180px; /* height to cover header + apps + polls */
+      background-color: #0b1220;
+      z-index: 20;
     }
   </style>
 </head>
@@ -62,6 +72,7 @@
       title="MoneyMoneyGames Games"
       loading="lazy">
     </iframe>
+    <div class="overlay"></div>
   </div>
 
 </body>
