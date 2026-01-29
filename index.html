@@ -18,16 +18,16 @@
       height: 100%;
       border: none;
     }
-    /* Overlay to hide Poll, Hall of Fame, and Apps button */
+    /* Overlay to cover only Poll, Hall of Fame, and Apps button */
     .overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100px; /* adjust based on where buttons appear */
-      background-color: #fff; /* match the background of the iframe area */
+      top: 10px; /* adjust to button vertical position */
+      right: 10px; /* adjust to button horizontal position */
+      width: 250px; /* adjust to cover buttons */
+      height: 60px; /* adjust to cover buttons */
+      background-color: white; /* or match page background */
       z-index: 10;
-      pointer-events: none;
+      pointer-events: none; /* let users click through if needed */
     }
   </style>
 </head>
