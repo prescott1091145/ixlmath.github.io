@@ -1,51 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MoneyMonenygames</title>
+
+  <!--
+    This file is 100% compatible with GitHub Pages.
+    Just upload it as index.html to your repository root.
+  -->
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
       width: 100%;
+      height: 100%;
       font-family: Arial, Helvetica, sans-serif;
-      background: #0f172a;
-      color: #fff;
+      background-color: #0b1220;
+      color: white;
     }
     header {
-      height: 56px;
+      height: 60px;
+      background-color: #020617;
       display: flex;
       align-items: center;
       padding: 0 16px;
-      background: #020617;
-      border-bottom: 1px solid #1e293b;
+      border-bottom: 2px solid #1e293b;
     }
     header h1 {
-      font-size: 20px;
       margin: 0;
-      letter-spacing: 0.5px;
+      font-size: 22px;
+      font-weight: bold;
     }
     iframe {
       width: 100%;
-      height: calc(100% - 56px);
+      height: calc(100% - 60px);
       border: none;
-      background: #000;
+      background-color: black;
     }
   </style>
 </head>
 <body>
+
   <header>
     <h1>MoneyMonenygames</h1>
   </header>
 
+  <!--
+    This iframe loads ALL games directly from HubblePlay.
+    Whatever games exist on their site will appear here.
+  -->
   <iframe
     src="https://hubbleplay.github.io/main.html"
     title="MoneyMonenygames Games"
-    loading="lazy"
-    referrerpolicy="no-referrer"
-  ></iframe>
+    loading="lazy">
+  </iframe>
+
 </body>
 </html>
-
