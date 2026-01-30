@@ -22,12 +22,12 @@ let score = 0;
 
 // spawn fruits randomly
 function spawnFruit() {
-  fruits.push({ x: Math.random()*760+20, y: Math.random()*560+20, size: 25, color: '#00ff00', type: Math.random() < 0.5 ? 'fire' : 'ice' });
+  fruits.push({ x: Math.random() * 760 + 20, y: Math.random() * 560 + 20, size: 25, color: '#00ff00', type: Math.random() < 0.5 ? 'fire' : 'ice' });
 }
 
 // spawn enemies randomly
 function spawnEnemy() {
-  enemies.push({ x: Math.random()*760+20, y: Math.random()*560+20, size: 30, color: '#ff0000', health: 50, speed: 1.2 });
+  enemies.push({ x: Math.random() * 760 + 20, y: Math.random() * 560 + 20, size: 30, color: '#ff0000', health: 50, speed: 1.2 });
 }
 
 // initial spawns
@@ -35,36 +35,31 @@ for (let i = 0; i < 5; i++) spawnFruit();
 for (let i = 0; i < 5; i++) spawnEnemy();
 
 const keys = {};
-document.addEventListener('keydown', e => keys[e.key] = true);
-document.addEventListener('keyup', e => keys[e.key] = false);
+document.addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; });
+document.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 
-// attack function
-function attackEnemy() {
+// attack function (mouse click)
+canvas.addEventListener('click', () => {
   enemies.forEach(e => {
     const dx = e.x - player.x;
     const dy = e.y - player.y;
     const dist = Math.sqrt(dx*dx + dy*dy);
-    if (dist < 50) {
-      e.health -= 5;
-    }
+    if (dist < 50) e.health -= 10;
   });
-}
-
-// handle mouse click for attack
-canvas.addEventListener('click', attackEnemy);
+});
 
 function update() {
   // move player
-  if (keys['ArrowUp'] || keys['w']) player.y -= player.speed;
-  if (keys['ArrowDown'] || keys['s']) player.y += player.speed;
-  if (keys['ArrowLeft'] || keys['a']) player.x -= player.speed;
-  if (keys['ArrowRight'] || keys['d']) player.x += player.speed;
+  if (keys['arrowup'] || keys['w']) player.y -= player.speed;
+  if (keys['arrowdown'] || keys['s']) player.y += player.speed;
+  if (keys['arrowleft'] || keys['a']) player.x -= player.speed;
+  if (keys['arrowright'] || keys['d']) player.x += player.speed;
 
   // keep player in bounds
   player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
   player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
 
-  // check fruit collection
+  // collect fruits
   for (let i = fruits.length - 1; i >= 0; i--) {
     const f = fruits[i];
     if (Math.abs(player.x - f.x) < (player.size + f.size)/2 && Math.abs(player.y - f.y) < (player.size + f.size)/2) {
@@ -80,4 +75,71 @@ function update() {
   enemies.forEach(e => {
     const dx = player.x - e.x;
     const dy = player.y - e.y;
-    co
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    e.x += (dx/dist) * e.speed;
+    e.y += (dy/dist) * e.speed;
+
+    // attack player
+    if (dist < (player.size + e.size)/2) {
+      player.health -= 0.3;
+    }
+
+    // respawn if dead
+    if (e.health <= 0) {
+      score += 5;
+      e.x = Math.random() * 760 + 20;
+      e.y = Math.random() * 560 + 20;
+      e.health = 50;
+    }
+  });
+
+  draw();
+  requestAnimationFrame(update);
+}
+
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // draw player
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.size, player.size);
+
+  // draw power glow
+  if (player.power) {
+    ctx.strokeStyle = player.power === 'fire' ? '#ff4500' : '#00f';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(player.x + player.size/2, player.y + player.size/2, 25, 0, Math.PI*2);
+    ctx.stroke();
+  }
+
+  // draw fruits
+  fruits.forEach(f => {
+    ctx.fillStyle = f.color;
+    ctx.fillRect(f.x, f.y, f.size, f.size);
+  });
+
+  // draw enemies
+  enemies.forEach(e => {
+    ctx.fillStyle = e.color;
+    ctx.fillRect(e.x, e.y, e.size, e.size);
+    // enemy health bar
+    ctx.fillStyle = '#000';
+    ctx.fillRect(e.x, e.y - 6, e.size, 4);
+    ctx.fillStyle = '#0f0';
+    ctx.fillRect(e.x, e.y - 6, e.size * (e.health / 50), 4);
+  });
+
+  // stats
+  ctx.fillStyle = '#000';
+  ctx.font = '20px Arial';
+  ctx.fillText(`Health: ${Math.floor(player.health)}`, 10, 20);
+  ctx.fillText(`Level: ${player.level}`, 10, 45);
+  ctx.fillText(`Score: ${score}`, 10, 70);
+}
+
+// start game
+update();
+</script>
+</body>
+</html>
